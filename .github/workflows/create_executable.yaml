@@ -6,36 +6,79 @@ on:
       - 'v*'
 jobs:
 
-  ubuntu-20:
-    runs-on: ubuntu-20.04
+# Create a new release and upload
+  create_release:
+    name: Create Release
+    runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Set up Python 3.8
-        uses: actions/setup-python@v2
-        with:
-          python-version: 3.8
-      
-      # Install dependencies
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
-
-      # run pyinstaller
-      - name: Run pyinstaller
-        run: |
-          pyinstaller --onefile --noconsole main.py
-
-      # Create a new release and upload
-      - name: Create Release
+      - name: Create Release 
         id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        uses: softprops/action-gh-release@v1
         with:
-          tag_name: ${{ needs.create_release.outputs.tag-name }}
-          release_name: Release ${{ needs.create_release.outputs.tag-name }}
+          name: ${{ github.ref_name }}
           draft: false
           prerelease: false
+          generate_release_notes: false
+
+  # #Build
+  # ubuntu-20:
+  #   runs-on: ubuntu-20.04
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v4
+
+  #     - name: Set up Python 3.8
+  #       uses: actions/setup-python@v2
+  #       with:
+  #         python-version: 3.8
+      
+  #     # Install dependencies
+  #     - name: Install dependencies
+  #       run: |
+  #         python -m pip install --upgrade pip
+  #         pip install -r requirements.txt
+
+  #     # run pyinstaller
+  #     - name: Run pyinstaller
+  #       run: |
+  #         pyinstaller --onefile --noconsole main.py -n ue_analysis
+
+
+  build_release:
+    name: Build Release
+    needs: create_release
+    strategy:
+      matrix:
+        os: [ubuntu-20.04, windows-2022]
+        include:
+          - os: ubuntu-20.04
+            release_suffix: dist/ue_analysis
+          - os: windows-2022
+            release_suffix: dist/ue_analysis.exe
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install dependencies
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.8'
+          cache: 'pip' # caching pip dependencies
+      - run: pip install -r requirements.txt
+
+      - name: Run Linux Build
+        if: matrix.os == 'ubuntu-20.04'
+        run: pyinstaller --onefile --noconsole main.py -n ue_analysis
+
+      - name: Run Windows Build
+        if: matrix.os == 'windows-2022'
+        shell: pwsh
+        run: pyinstaller --onefile --noconsole main.py -n ue_analysis
+
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ needs.create_release.outputs.tag-name }}
+          files: ${{ matrix.release_suffix }}
+
