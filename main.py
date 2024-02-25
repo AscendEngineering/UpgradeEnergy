@@ -21,7 +21,7 @@ import numpy as np
 def main():
     """Command line interface"""
 
-    parser = argparse.ArgumentParser(description='Convert ULog to CSV')
+    parser = argparse.ArgumentParser(description='Extracting Battery Information from ULog file and converting it to CSV file.')
     parser.add_argument('filename', metavar='file.ulg', help='ULog input file')
 
     parser.add_argument('-d', '--delimiter', dest='delimiter', action='store',

@@ -8,4 +8,4 @@ This is a battery information extractor for PX4 ulogs from Upgrade Energy.
 `pyinstall main.py`
 
 ## Running
-`./main [ulog filename] 
+`./main [ulog filename]`
