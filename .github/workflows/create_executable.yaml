@@ -28,6 +28,10 @@ jobs:
         run: |
           pyinstaller --onefile --noconsole main.py
 
+      - name: Run pyinstaller
+        run: |
+          ls
+
       - uses: actions/upload-artifact@v4
         with:
           name: upgrade-energy
