@@ -69,7 +69,7 @@ jobs:
 
       - name: Run Linux Build
         if: matrix.os == 'ubuntu-20.04'
-        run: pyinstaller --onefile --noconsole main.py -n ue_analysis && chmod +x dist/ue_analysis/ue_analysis
+        run: pyinstaller --onefile --noconsole main.py -n ue_analysis && chmod +x dist/ue_analysis
 
       - name: Run Windows Build
         if: matrix.os == 'windows-2022'
