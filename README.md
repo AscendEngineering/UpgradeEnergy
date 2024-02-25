@@ -9,3 +9,11 @@ This is a battery information extractor for PX4 ulogs from Upgrade Energy.
 
 ## Running
 `./main [ulog filename]`
+
+## To Create a new release on Github
+Push a new tag to github
+ex:
+```
+git tag v0.1
+git push origin v0.1
+```
