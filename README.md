@@ -1,6 +1,8 @@
 # Description
 This is a battery information extractor for PX4 ulogs from Upgrade Energy.
 
+[Video Tutorial](https://www.loom.com/share/91bb4783c519403d9d6433d518417fd9)
+
 ## Dev Setup
 `pip3 install -r requirements`
 
