@@ -11,6 +11,7 @@ This is a battery information extractor for PX4 ulogs from Upgrade Energy.
 
 ## Running
 `./main [ulog filename]`
+
 `jupyter notebook` then open the example notebook included in this repo. Click the tab 'Run' at the top of jupyter notebook and click 'Run All Cells'. When the file dialog opens, select the csv file to process.
 
 ## To Create a new release on Github
